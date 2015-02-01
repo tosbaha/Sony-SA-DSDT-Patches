@@ -1,0 +1,11 @@
+=== Sony-S Display Options ===		DSDT		Patches/NullPatch.txt
+[1] EDID data for 1600 x 900 Display		DSDT		Patches/graphics_EDID.txt
+[2] Brightness Fix		DSDT		Patches/graphics_PNLF_ivy_sandy.txt
+[3] Disable AMD GPU		SSDT		Patches/graphics_INI-disable.txt
+=== Sony-S Battery Options ===		DSDT		Patches/NullPatch.txt
+[1] Set to Dual/Single Dynamic Mode		DSDT		Patches/Battery_Sony-VAIO-S-Dual.txt
+[2] Set to Fixed Single Battery Mode		DSDT		Patches/Battery_Sony-VAIO-S-Single.txt
+=== Sony-S Required Patches ===		DSDT		Patches/NullPatch.txt
+[1] Fix Device PS2M		DSDT		Patches/Fix_Device_PS2M.txt
+[2] Audio Layout 3		DSDT		Patches/audio_HDEF-layout3.txt
+[3] 6-Series USB		DSDT		Patches/usb_USB_6-series.txt

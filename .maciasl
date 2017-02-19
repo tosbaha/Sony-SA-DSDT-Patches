@@ -1,11 +1,24 @@
-=== Sony-S Display Options ===		DSDT		Patches/NullPatch.txt
-[1] EDID data for 1600 x 900 Display		DSDT		Patches/graphics_EDID.txt
-[2] Brightness Fix		DSDT		Patches/graphics_PNLF_ivy_sandy.txt
-[3] Disable AMD GPU		SSDT		Patches/graphics_INI-disable.txt
-=== Sony-S Battery Options ===		DSDT		Patches/NullPatch.txt
-[1] Set to Dual/Single Dynamic Mode		DSDT		Patches/Battery_Sony-VAIO-S-Dual.txt
-[2] Set to Fixed Single Battery Mode		DSDT		Patches/Battery_Sony-VAIO-S-Single.txt
-=== Sony-S Required Patches ===		DSDT		Patches/NullPatch.txt
-[1] Fix Device PS2M		DSDT		Patches/Fix_Device_PS2M.txt
-[2] Audio Layout 3		DSDT		Patches/audio_HDEF-layout3.txt
-[3] 6-Series USB		DSDT		Patches/usb_USB_6-series.txt
+[bat] === Sony-S Battery Options ===	Patches/NullPatch.txt
+[bat] 1. Set to Dual/Single Dynamic Mode	Patches/Battery_Sony-VAIO-S-Dual.txt
+[bat] 2. Combine Batteries Patches/Battery	Patches/_Sony-VAIO-S-Combined.txt
+[gfx] === Sony-S Display Options ===	Patches/NullPatch.txt
+[gfx] 1. Rename GFX0 to IGPU	Patches/graphics_Rename-GFX0.txt
+[gfx] 2. EDID data for 1600 x 900 Display	Patches/graphics_EDID.txt
+[gfx] 3. Brightness Fix		Patches/graphics_PNLF_ivy_sandy.txt
+[gfx] 4. Disable AMD GPU	Patches/graphics_INI-disable.txt
+[sys] === Sony-S Required Patches ===	Patches/NullPatch.txt
+[sys] 1. Add IMEI	Patches/system_IMEI.txt
+[sys] 2. Add MCHC	Patches/system_MCHC.txt
+[sys] 3. HPET Fix	Patches/system_HPET.txt
+[sys] 4. Fix _WAK Arg0 v2	Patches/system_WAK2.txt
+[sys] 5. Shutdown fix	Patches/system_Shutdown.txt
+[sys] 6. SMBUS Fix	Patches/system_SMBUS.txt
+[sys] 7. RTC Fix 	Patches/system_RTC.txt
+[sys] 8. IRQ Fix	Patches/system_IRQ.txt
+[sys] 9. AC Adapter Fix	Patches/system_ADP1.txt
+[sys] 10. OS Check Fix	Patches/system_OSYS.txt
+[sys] 11. Fix Device PS2M	Patches/Fix_Device_PS2M.txt
+[sys] 12. Fix _PLD Buffer/Package Error	Patches/fix_PLD.txt
+[sys] 13. _T_x rename	Patches/system_TX.txt
+[sys] 14. Audio Layout 3	Patches/audio_HDEF-layout3.txt
+[sys] 15. 6-Series USB	Patches/usb_USB_6-series.txt

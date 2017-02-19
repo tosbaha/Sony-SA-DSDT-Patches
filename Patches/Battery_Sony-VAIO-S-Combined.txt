@@ -1,0 +1,26 @@
+# Based on code by: RehabMan
+# Battery_Sony-VAIO-S-Combined.txt
+
+# You should only do this patch, if you did the following 
+# 1. SDT-BATC.dsl must be compiled and saved as SSDT-BATC.aml into your Clover/ACPI/patched folder
+# 2. DropOem=true and SortedOrder set correctly
+
+into definitionblock code_regex External\s+\(_SB_.*\) replace_matched
+begin
+External (_SB_.PCI0.IEIT.EITV, MethodObj)\n
+External (_SB_.PCI0.LPCB.H_EC.BATC, DeviceObj)\n
+end;
+
+# Change Notify routines
+
+# Rename BAT1 to BATC
+into method label PNOT code_regex \(\\_SB.PCI0\.LPCB\.H_EC\.BAT1, replaceall_matched 
+begin 
+\(\\_SB.PCI0\.LPCB\.H_EC\.BATC, 
+end;
+
+# Rename BAT2 to BATC
+into method label PNOT code_regex \(\\_SB.PCI0\.LPCB\.H_EC\.BAT2, replaceall_matched 
+begin 
+\(\\_SB.PCI0\.LPCB\.H_EC\.BATC, 
+end;

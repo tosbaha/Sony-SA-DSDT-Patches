@@ -1,3 +1,4 @@
+# English
 # Sony-SA-DSDT-Patches
 DSDT and SSDT Patches for Sony SA
 This patches are created for my Sony VPCSA33GX Laptop. In order to use these patches you must have following
@@ -32,9 +33,44 @@ Download RehabMan's MaciASL from https://bitbucket.org/RehabMan/os-x-maciasl-pat
 ## Applying Patches
 ### DSDT Patches
 Open your DSDT file with MaciASL and apply patches. EDID data for 1600 x 900 Display patch is a *must* Actually without this patch you will not able to install OSX at all. You can use VM, or previously installed OSX to apply this patch first. I use patched AppleHDA from http://www.insanelymac.com/forum/topic/298663-applehda-for-yosemite/ for Realtek ACL275 sound card. That is why HDEF is patched for layout 3. If you are using other AppleHDA change the layout id. You can also apply other patches to enable brightness control and several fixes. 
-### SSDT Patch
-In order to disable AMD card, SSDT must also be patched. I assume that you created your SSDT with https://github.com/Piker-Alpha/ssdtPRGen.sh Now open terminal and go to the folder which has all DSDT and SSDT files we extracted before. Issue following command.
+
+---
+
+# Türkçe
+# Sony-SA-DSDT-Yamaları
+
+Bu yamalar Sony VPCSA33GX Laptop için üretilmiştir. Bu yamaları kullanabilmek için aşağıdaki işlemlerin yapılması gerekir
+
+1. Temiz DSDT ve SSDT dosyaları
+2. EDID bilgisi
+3. MaciASL
+4. Yamaların uygulanması
+
+
+## DSDT ve SSDT dosyalarının alınması
+ACPI tablosu Windows veya Linux üzerinden alınabilir.
+### Windows
+Ben bu methodu sadece DSDT mi almak için kullanmış olsamda bu method ile DSDT ve SSDT dosyaları da alınabilir. Öncelikle [RW-Everything](http://rweverything.phpnet.us/index.htm) uygulamasını indirin. RW-Everything i çalıştırın ve ACPI Tables'ı seçin. Daha sonrada DSDT ve *tüm* SSDT dosyalarını kaydedin.
+
+### Linux
+Bütün DSDT ve SSDT dosyalarına ihtiyacımız olacak. Herhangi bir Linux(Ubuntu, Parted Magic.....) ile bilgisayarınızı boot edin aşağıdaki komutları  Terminal ekranına yapıştırın.
+
 ```
-iasl -da -dl *.aml
+sudo cat /sys/firmware/acpi/tables/DSDT >dsdt.aml
+sudo cat /sys/firmware/acpi/tables/SSDT1 >ssdt1.aml
+sudo cat /sys/firmware/acpi/tables/SSDT2 >ssdt2.aml
+sudo cat /sys/firmware/acpi/tables/SSDT3 >ssdt3.aml
+sudo cat /sys/firmware/acpi/tables/SSDT4 >ssdt4.aml
+sudo cat /sys/firmware/acpi/tables/SSDT5 >ssdt5.aml
+sudo cat /sys/firmware/acpi/tables/SSDT6 >ssdt6.aml
 ```
-After this you will get bunch of dsl files in the same directory. Open ssdt5.dsl and apply Disable AMD patch. Then save as SSDT-1.aml and file type as ACPI Machine Language Battery. Copy SSDT-1.aml file to your Extra folder(if you are using Chimera)
+Bu komutu çalıştırdığınız yerde oluşan *.aml dosyalarını kopyalayın.
+
+## EDID bilgisi
+Eğer EDID bilgisini eklemezseniz kurulum ekranını göremezsiniz. Sizin EDID bilginiz benimkinden farklı olabilir. Bu yüzden EDID bilgisini Windows üzerinden almanız gerekmektedir. [Monitor Asset Manager](http://www.entechtaiwan.com/util/moninfo.shtm) programını kullanarak bu bilgiye sahip olabilirsiniz. Programı indirip çalıştırın ve monitörünüzü seçip daha sonra 128 karakterden oluşan EDID bilgisini kopyalayın. Bu bilgiyi EDID yamasında kullanacaksınız.
+## MaciASL
+RehabMan'ın [MaciASL](https://bitbucket.org/RehabMan/os-x-maciasl-patchmatic/downloads) yazılımını kısmından inidirin ve daha sonra MaciASL i açın ve Preferences/Sources sekmesini seçin. Daha sonra __+__ butonuna tıklayaın. **Name** kısmına Sony **URL** kısmına da https://raw.githubusercontent.com/tosbaha/Sony-SA-DSDT-Patches/master/ yazın.
+## Yamaların Uygulanması
+### DSDT Patches
+DSDT dosyanızı MaciASL ile açın ve yamaları uygulayın. EDID data for 1600 x 900 Display yaması *zorunlu* bir yamadır. Bu yama olmadan kurulum ekranı açılmyacaktır. Eğer DSDT yaması yapamıyorsanız bu bilgileri Clover ile de ekleyebilirsiniz. ACL275 ses kartı için HDEF yamasının yapılması gerekmektedir. Ekran parlaklığı, batarya ve diğer şeyler için diğer yamaları da uygulayabilirsiniz.
+

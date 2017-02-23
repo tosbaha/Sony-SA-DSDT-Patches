@@ -41,7 +41,7 @@
 //   86 42 41 54 30 0A 80
 //
 // Sometimes, you'll find there is a fully qualified path.
-// Such as, Notify (\_SB.PCI0.LPC.EC.BAT1, 0x01)
+// Such as, Notify (\_SB.PCI0.LPCB.H_EC.BAT1, 0x01)
 //   86 5C 2F 05 5F 53 42 5F 50 43 49 30 4C 50 43 5F 45 43 5F 5F 42 41 54 30 0A 01
 // Changing to BATC:
 //   86 5C 2F 05 5F 53 42 5F 50 43 49 30 4C 50 43 5F 45 43 5F 5F 42 41 54 43 0A 01
@@ -54,8 +54,8 @@
 
 DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
 {
-    External(_SB.PCI0.LPC.EC, DeviceObj)
-    Scope(_SB.PCI0.LPC.EC)
+    External(_SB.PCI0.LPCB.H_EC, DeviceObj)
+    Scope(_SB.PCI0.LPCB.H_EC)
     {
         External(BAT2, DeviceObj)
         External(BAT2._HID, StrObj)

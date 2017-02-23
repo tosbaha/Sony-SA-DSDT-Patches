@@ -15,15 +15,15 @@
 
 // IMPORTANT:
 //
-// To use this SSDT, you must also patch any Notify for either BAT1 or BAT2
+// To use this SSDT, you must also patch any Notify for either BAT2 or BAT1
 // objects.
 //
 // The Notify is used to tell the system when a battery is removed or added.
 //
 // Any code:
-//   Notify(...BAT1, ...)
-//         -or
 //   Notify(...BAT2, ...)
+//         -or
+//   Notify(...BAT1, ...)
 //
 // Must be changed to:
 //   Notify(...BATC, ...)
@@ -35,13 +35,13 @@
 //
 // You can Clover hotpatch (config.plist/ACPI/DSDT/Patches) your battery code.
 //
-// For example, Notify(BAT1, 0x80) is
+// For example, Notify(BAT2, 0x80) is
 //   86 42 41 54 30 0A 80
 // To change it to Notify(BATC, 0x80):
 //   86 42 41 54 30 0A 80
 //
 // Sometimes, you'll find there is a fully qualified path.
-// Such as, Notify (\_SB.PCI0.LPCB.H_EC.BAT2, 0x01)
+// Such as, Notify (\_SB.PCI0.LPC.EC.BAT1, 0x01)
 //   86 5C 2F 05 5F 53 42 5F 50 43 49 30 4C 50 43 5F 45 43 5F 5F 42 41 54 30 0A 01
 // Changing to BATC:
 //   86 5C 2F 05 5F 53 42 5F 50 43 49 30 4C 50 43 5F 45 43 5F 5F 42 41 54 43 0A 01
@@ -54,19 +54,19 @@
 
 DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
 {
-    External(_SB.PCI0.LPCB.H_EC, DeviceObj)
-    Scope(_SB.PCI0.LPCB.H_EC)
+    External(_SB.PCI0.LPC.EC, DeviceObj)
+    Scope(_SB.PCI0.LPC.EC)
     {
-        External(BAT1, DeviceObj)
-        External(BAT1._HID, StrObj)
-        External(BAT1._STA, MethodObj)
-        External(BAT1._BIF, MethodObj)
-        External(BAT1._BST, MethodObj)
         External(BAT2, DeviceObj)
         External(BAT2._HID, StrObj)
         External(BAT2._STA, MethodObj)
         External(BAT2._BIF, MethodObj)
         External(BAT2._BST, MethodObj)
+        External(BAT1, DeviceObj)
+        External(BAT1._HID, StrObj)
+        External(BAT1._STA, MethodObj)
+        External(BAT1._BIF, MethodObj)
+        External(BAT1._BST, MethodObj)
         
         Device(BATC)
         {
@@ -76,8 +76,8 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
             Method(_INI)
             {
                 // disable original battery objects by setting invalid _HID
-                ^^BAT1._HID = 0
                 ^^BAT2._HID = 0
+                ^^BAT1._HID = 0
             }
 
             Method(CVWA, 3)
@@ -96,36 +96,36 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
 
             Method(_STA)
             {
-                // call original _STA for BAT1 and BAT2
+                // call original _STA for BAT2 and BAT1
                 // result is bitwise OR between them
-                Return(^^BAT1._STA() | ^^BAT2._STA())
+                Return(^^BAT2._STA() | ^^BAT1._STA())
             }
 
-            Name(B0CO, 0x00) // BAT1 0/1 needs conversion to mAh
-            Name(B1CO, 0x00) // BAT2 0/1 needs conversion to mAh
-            Name(B0DV, 0x00) // BAT1 design voltage
-            Name(B1DV, 0x00) // BAT2 design voltage
+            Name(B0CO, 0x00) // BAT2 0/1 needs conversion to mAh
+            Name(B1CO, 0x00) // BAT1 0/1 needs conversion to mAh
+            Name(B0DV, 0x00) // BAT2 design voltage
+            Name(B1DV, 0x00) // BAT1 design voltage
 
             Method(_BST)
             {
-                // Local0 BAT1._BST
-                // Local1 BAT2._BST
-                // Local2 BAT1._STA
-                // Local3 BAT2._STA
+                // Local0 BAT2._BST
+                // Local1 BAT1._BST
+                // Local2 BAT2._STA
+                // Local3 BAT1._STA
                 // Local4/Local5 scratch
 
-                // gather battery data from BAT1
-                Local0 = ^^BAT1._BST()
-                Local2 = ^^BAT1._STA()
+                // gather battery data from BAT2
+                Local0 = ^^BAT2._BST()
+                Local2 = ^^BAT2._STA()
                 If (0x1f == Local2)
                 {
                     // check for invalid remaining capacity
                     Local4 = DerefOf(Local0[2])
                     If (!Local4 || Ones == Local4) { Local2 = 0; }
                 }
-                // gather battery data from BAT2
-                Local1 = ^^BAT2._BST()
-                Local3 = ^^BAT2._STA()
+                // gather battery data from BAT1
+                Local1 = ^^BAT1._BST()
+                Local3 = ^^BAT1._STA()
                 If (0x1f == Local3)
                 {
                     // check for invalid remaining capacity
@@ -135,9 +135,9 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
                 // find primary and secondary battery
                 If (0x1f != Local2 && 0x1f == Local3)
                 {
-                    // make primary use BAT2 data
-                    Local0 = Local1 // BAT2._BST result
-                    Local2 = Local3 // BAT2._STA result
+                    // make primary use BAT1 data
+                    Local0 = Local1 // BAT1._BST result
+                    Local2 = Local3 // BAT1._STA result
                     Local3 = 0  // no secondary battery
                 }
                 // combine batteries into Local0 result if possible
@@ -166,15 +166,15 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
                         // critical
                         Local0[0] = 4
                     }
-                    // if none of the above, just leave as BAT1 is
+                    // if none of the above, just leave as BAT2 is
 
                     // Note: Following code depends on _BIF being called before _BST to set B0CO and B1CO
 
-                    // _BST 1 - Battery Present Rate - Add BAT1 and BAT2 values
+                    // _BST 1 - Battery Present Rate - Add BAT2 and BAT1 values
                     Local0[1] = CVWA(DerefOf(Local0[1]), B0DV, B0CO) + CVWA(DerefOf(Local1[1]), B1DV, B1CO)
-                    // _BST 2 - Battery Remaining Capacity - Add BAT1 and BAT2 values
+                    // _BST 2 - Battery Remaining Capacity - Add BAT2 and BAT1 values
                     Local0[2] = CVWA(DerefOf(Local0[2]), B0DV, B0CO) + CVWA(DerefOf(Local1[2]), B1DV, B1CO)
-                    // _BST 3 - Battery Present Voltage - Average BAT1 and BAT2 values
+                    // _BST 3 - Battery Present Voltage - Average BAT2 and BAT1 values
                     Local0[3] = (DerefOf(Local0[3]) + DerefOf(Local1[3])) / 2
                 }
                 Return(Local0)
@@ -182,15 +182,15 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
 
             Method(_BIF)
             {
-                // Local0 BAT1._BIF
-                // Local1 BAT2._BIF
-                // Local2 BAT1._STA
-                // Local3 BAT2._STA
+                // Local0 BAT2._BIF
+                // Local1 BAT1._BIF
+                // Local2 BAT2._STA
+                // Local3 BAT1._STA
                 // Local4/Local5 scratch
 
-                // gather and validate data from BAT1
-                Local0 = ^^BAT1._BIF()
-                Local2 = ^^BAT1._STA()
+                // gather and validate data from BAT2
+                Local0 = ^^BAT2._BIF()
+                Local2 = ^^BAT2._STA()
                 If (0x1f == Local2)
                 {
                     // check for invalid design capacity
@@ -203,9 +203,9 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
                     Local4 = DerefOf(Local0[4])
                     If (!Local4 || Ones == Local4) { Local2 = 0; }
                 }
-                // gather and validate data from BAT2
-                Local1 = ^^BAT2._BIF()
-                Local3 = ^^BAT2._STA()
+                // gather and validate data from BAT1
+                Local1 = ^^BAT1._BIF()
+                Local3 = ^^BAT1._STA()
                 If (0x1f == Local3)
                 {
                     // check for invalid design capacity
@@ -221,9 +221,9 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
                 // find primary and secondary battery
                 If (0x1f != Local2 && 0x1f == Local3)
                 {
-                    // make primary use BAT2 data
-                    Local0 = Local1 // BAT2._BIF result
-                    Local2 = Local3 // BAT2._STA result
+                    // make primary use BAT1 data
+                    Local0 = Local1 // BAT1._BIF result
+                    Local2 = Local3 // BAT1._STA result
                     Local3 = 0  // no secondary battery
                 }
                 // combine batteries into Local0 result if possible
@@ -236,20 +236,20 @@ DefinitionBlock ("", "SSDT", 2, "hack", "BATC", 0)
                     // set _BIF[0] = 1 => mAh
                     Local0[0] = 1
                     // _BIF 4 - Design Voltage - store value for each Battery in mV
-                    B0DV = DerefOf(Local0[4]) // cache BAT1 voltage
-                    B1DV = DerefOf(Local1[4]) // cache BAT2 voltage
-                    // _BIF 1 - Design Capacity - add BAT1 and BAT2 values
+                    B0DV = DerefOf(Local0[4]) // cache BAT2 voltage
+                    B1DV = DerefOf(Local1[4]) // cache BAT1 voltage
+                    // _BIF 1 - Design Capacity - add BAT2 and BAT1 values
                     Local0[1] = CVWA(DerefOf(Local0[1]), B0DV, B0CO) + CVWA(DerefOf(Local1[1]), B1DV, B1CO)
-                    // _BIF 2 - Last Full Charge Capacity - add BAT1 and BAT2 values
+                    // _BIF 2 - Last Full Charge Capacity - add BAT2 and BAT1 values
                     Local0[2] = CVWA(DerefOf(Local0[2]), B0DV, B0CO) + CVWA(DerefOf(Local1[2]), B1DV, B1CO)
-                    // _BIF 3 - Battery Technology - leave BAT1 value
-                    // _BIF 4 - Design Voltage - average BAT1 and BAT2 values
+                    // _BIF 3 - Battery Technology - leave BAT2 value
+                    // _BIF 4 - Design Voltage - average BAT2 and BAT1 values
                     Local0[4] = (B0DV + B1DV) / 2
-                    // _BIF 5 - Design Capacity Warning - add BAT1 and BAT2 values
+                    // _BIF 5 - Design Capacity Warning - add BAT2 and BAT1 values
                     Local0[5] = CVWA(DerefOf(Local0[5]), B0DV, B0CO) + CVWA(DerefOf(Local1[5]), B1DV, B1CO)
-                    // _BIF 6 - Design Capacity of Low - add BAT1 and BAT2 values
+                    // _BIF 6 - Design Capacity of Low - add BAT2 and BAT1 values
                     Local0[6] = CVWA(DerefOf(Local0[6]), B0DV, B0CO) + CVWA(DerefOf(Local1[6]), B1DV, B1CO)
-                    // _BIF 7+ - Leave BAT1 values for now
+                    // _BIF 7+ - Leave BAT2 values for now
                 }
                 Return(Local0)
             } // _BIF

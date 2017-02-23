@@ -47,11 +47,5 @@ into_all method label _BST code_regex \(B2FV, replaceall_matched begin (B1B2 (YF
 into_all method label _BST code_regex B2FV\), replaceall_matched begin B1B2 (YFV0, YFV1)\), end;
 into_all method label _BST code_regex \(B2RC, replaceall_matched begin (B1B2 (YRC0, YRC1), end;
 
-# Activate BAT1 device
-into method label _STA parent_label BAT1 replace_content begin Return (0x1F) end;
-
-# Activate BAT2 device
-into method label _STA parent_label BAT2 replace_content begin Return (0x1F) end;
-
 # Activate H_EC device
 into method label _STA parent_label H_EC replace_content begin Return (0x0F) end;

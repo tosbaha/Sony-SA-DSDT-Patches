@@ -1,6 +1,6 @@
 [bat] === Sony-S Battery Options ===	Patches/NullPatch.txt
 [bat] 1. Set to Dual/Single Dynamic Mode	Patches/Battery_Sony-VAIO-S-Dual.txt
-[bat] 2. Combine Batteries Patches/Battery	Patches/_Sony-VAIO-S-Combined.txt
+[bat] 2. Combine Batteries Patches/Battery	Patches/Battery_Sony-VAIO-S-Combined.txt
 [gfx] === Sony-S Display Options ===	Patches/NullPatch.txt
 [gfx] 1. Rename GFX0 to IGPU	Patches/graphics_Rename-GFX0.txt
 [gfx] 2. EDID data for 1600 x 900 Display	Patches/graphics_EDID.txt

@@ -1,0 +1,123 @@
+# Maintained by: tosbaha
+# function_keys.txt
+
+# These patches will enable Fn keys for the following
+# Toucpad enable/disable
+# Brightness increase/decrease
+# Zoom In/Zoom Out
+
+# If you want to use other function keys, you can map to other keys.
+# For a reference, here is the codes for keys
+# _QA event is generated when key is pressed
+# _QB event is generated when key is released
+# Here is a handy table for the key codes
+
+#	{ 0x81, SONYPI_EVENT_FNKEY_F1 },
+#	{ 0x01, SONYPI_EVENT_FNKEY_RELEASED },
+#	{ 0x85, SONYPI_EVENT_FNKEY_F5 }, //brightness down
+#	{ 0x05, SONYPI_EVENT_FNKEY_RELEASED },
+#	{ 0x86, SONYPI_EVENT_FNKEY_F6 }, //brightness up
+#	{ 0x06, SONYPI_EVENT_FNKEY_RELEASED },
+#	{ 0x87, SONYPI_EVENT_FNKEY_F7 }, //change Display
+#	{ 0x07, SONYPI_EVENT_FNKEY_RELEASED },
+#	{ 0x8A, SONYPI_EVENT_FNKEY_F10 }, //Zoom In
+#	{ 0x0A, SONYPI_EVENT_FNKEY_RELEASED },
+#	{ 0x8C, SONYPI_EVENT_FNKEY_F12 },  //Sleep
+#   { 0x0C, SONYPI_EVENT_FNKEY_RELEASED },
+#   { 0xA6, SONYPI_EVENT_ASSIST }, //Assist
+#   { 0x26, SONYPI_EVENT_ASSIST_RELEASED },
+#   { 0xA5, SONYPI_EVENT_VAIO }, //Vaio
+#   { 0x25, SONYPI_EVENT_VAIO_RELEASED },
+
+# For this patch to work, you must use a compatible kext
+# a) Rehabman's VoodooPS2 (basic touchpad)
+# b) My fork of DrHut's Alps driver which has Rehabman's fixes
+
+#Insert enable code to _REG of H_EC device
+into method label _REG code_regex (If\s+\(.*\(Arg0,\s+0x03.*\s+\{) replace_matched
+begin
+%1\n
+SNFS()\n
+end;
+
+# sony_functionkeys_start
+into method label SNFS remove_entry;
+into definitionblock code_regex . insert
+begin
+Method (SNFS, 0, NotSerialized) {\n
+        //Enable all events. This can be used for further\n
+        \_SB.PCI0.LPCB.SNC.SN02 (0xFFFF)\n 
+        //Enable function keys\n
+        Store (SCSH (0x0100, Zero), Local0)\n
+
+        //Followings are NOT needed for my model\n
+        //Store (SCSH (0x0101, Zero), Local0)\n
+        //Store (SCSH (0x0102, 0x0100), Local0)\n
+        //Store (SCSH (0x0127, Zero), Local0)\n
+}\n
+end;
+
+# sony_call_snc_handle
+into method label SCSH remove_entry;
+into definitionblock code_regex . insert
+begin
+Method (SCSH, 2, NotSerialized) {\n
+        Local0 = SFSH(Arg0)\n
+        If (Local0 < 0)\n
+        {\n
+            Return (0xFFFF)\n
+        }\n
+        Return (\_SB.PCI0.LPCB.SNC.SN07 (Local0 | Arg1))\n
+}\n
+end;
+
+# sony_find_snc_handle
+into method label SFSH remove_entry;
+into definitionblock code_regex . insert
+begin
+Method (SFSH, 1, NotSerialized) {\n
+        Local0 = 0x20\n
+        While (Local0 < 0x30)\n
+        {\n
+            Local1 = \_SB.PCI0.LPCB.SNC.SN00(Local0)\n
+            If (Arg0 == Local1)\n
+           {\n
+                Return(Local0 - 0x20)\n
+            }\n
+            Local0++\n
+        }\n
+        Return(0xFFFF)\n
+     }\n
+end;
+
+into method label _Q0A code_regex ([\s\S]*) replace_matched
+begin
+%1\n
+If (LEqual (EVTC, 0x81)) //touchpad disable\n 
+{\n
+    Notify (PS2K, 0x0437) \n
+}\n
+
+If (LEqual (EVTC, 0x85)) //brightness down\n 
+{\n
+	Notify (PS2K, 0x0405) \n
+}\n
+If (LEqual (EVTC, 0x86)) //brightness up\n 
+{\n
+    Notify (PS2K, 0x0406)\n
+}\n
+ If (LEqual (EVTC, 0x89)) //Zoom - \n
+ {\n
+    Notify (PS2K, 0x0138)\n
+    Notify (PS2K, 0x010C)\n
+    Notify (PS2K, 0x01B8)\n
+    Notify (PS2K, 0x018C)\n
+    }\n
+ If (LEqual (EVTC, 0x8A)) //Zoom + \n
+ {\n
+    Notify (PS2K, 0x0138)\n
+    Notify (PS2K, 0x010D)\n
+    Notify (PS2K, 0x01B8)\n
+    Notify (PS2K, 0x018D)\n
+    }\n
+end;

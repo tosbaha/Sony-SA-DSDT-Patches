@@ -26,13 +26,20 @@ sudo cat /sys/firmware/acpi/tables/SSDT4 >ssdt4.aml
 sudo cat /sys/firmware/acpi/tables/SSDT5 >ssdt5.aml
 sudo cat /sys/firmware/acpi/tables/SSDT6 >ssdt6.aml
 ```
+
+### Extracting using Clover
+Dump your original ACPI tables with Clover by hitting F4 on boot screen. Original tables will be saved to /EFI/CLOVER/origin folder.
+
 ## Your EDID data
-You will not able to see installation screen, if you don't add the necessary EDID data. Your screen EDID data can be different than mine. Therefore you must extract your native EDID from Windows. You can use Monitor Asset Manager from http://www.entechtaiwan.com/util/moninfo.shtm to extract. Download the software, open it and select your monitor and copy the 128 bytes raw data. You will use this data in your EDID patch.
+You will not able to see installation screen, if you don't add the necessary EDID data. Your screen EDID data can be different than mine. Therefore you must extract your native EDID from Windows. You can use [Monitor Asset Manager](http://www.entechtaiwan.com/util/moninfo.shtm) to extract. Download the software, open it and select your monitor and copy the 128 bytes raw data. You will use this data in your EDID patch.
 ## MaciASL
-Download RehabMan's MaciASL from https://bitbucket.org/RehabMan/os-x-maciasl-patchmatic/downloads Open MaciASL and add my repo by going Preferences/Sources
+Download RehabMan's [MaciASL](https://bitbucket.org/RehabMan/os-x-maciasl-patchmatic/downloads) Open MaciASL and add my repo by going Preferences/Sources
 ## Applying Patches
 ### DSDT Patches
-Open your DSDT file with MaciASL and apply patches. EDID data for 1600 x 900 Display patch is a *must* Actually without this patch you will not able to install OSX at all. You can use VM, or previously installed OSX to apply this patch first. I use patched AppleHDA from http://www.insanelymac.com/forum/topic/298663-applehda-for-yosemite/ for Realtek ACL275 sound card. That is why HDEF is patched for layout 3. If you are using other AppleHDA change the layout id. You can also apply other patches to enable brightness control and several fixes. 
+Open your DSDT file with MaciASL and apply patches. EDID data for 1600 x 900 Display patch is a *must* Actually without this patch you will not able to install OSX at all. You can use VM, or previously installed OSX to apply this patch first. HDEF is patched for layout 3. If you are using other AppleHDA, change the layout id. You can also apply other patches to enable brightness control and fix other issues. 
+##Disabling Radeon
+Patch SSDT-7.aml with SSDT patches from repo(Rename GFX0 to IGPU,AMD Disable, Cleanup SSDT)
+
 
 ---
 
@@ -66,6 +73,9 @@ sudo cat /sys/firmware/acpi/tables/SSDT6 >ssdt6.aml
 ```
 Bu komutu çalıştırdığınız yerde oluşan *.aml dosyalarını kopyalayın.
 
+### Extracting using Clover
+Orjinal ACPI tablolarını en kolay Clover ile alabilirsiniz. Clover ekranında iken F4 tuşuna basınç Böylecek orjinal tablolar /EFI/CLOVER/origin klasörüne kaydedilecektir.
+
 ## EDID bilgisi
 Eğer EDID bilgisini eklemezseniz kurulum ekranını göremezsiniz. Sizin EDID bilginiz benimkinden farklı olabilir. Bu yüzden EDID bilgisini Windows üzerinden almanız gerekmektedir. [Monitor Asset Manager](http://www.entechtaiwan.com/util/moninfo.shtm) programını kullanarak bu bilgiye sahip olabilirsiniz. Programı indirip çalıştırın ve monitörünüzü seçip daha sonra 128 karakterden oluşan EDID bilgisini kopyalayın. Bu bilgiyi EDID yamasında kullanacaksınız.
 ## MaciASL
@@ -73,4 +83,5 @@ RehabMan'ın [MaciASL](https://bitbucket.org/RehabMan/os-x-maciasl-patchmatic/do
 ## Yamaların Uygulanması
 ### DSDT Patches
 DSDT dosyanızı MaciASL ile açın ve yamaları uygulayın. EDID data for 1600 x 900 Display yaması *zorunlu* bir yamadır. Bu yama olmadan kurulum ekranı açılmyacaktır. Eğer DSDT yaması yapamıyorsanız bu bilgileri Clover ile de ekleyebilirsiniz. ACL275 ses kartı için HDEF yamasının yapılması gerekmektedir. Ekran parlaklığı, batarya ve diğer şeyler için diğer yamaları da uygulayabilirsiniz.
-
+##Disabling Radeon
+SSDT-7.aml dosyasını bu repo da bulunan SSDT yamaları ile yamalayın.(Rename GFX0 to IGPU,AMD Disable, Cleanup SSDT)

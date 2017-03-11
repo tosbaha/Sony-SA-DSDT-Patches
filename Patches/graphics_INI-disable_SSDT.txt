@@ -1,0 +1,9 @@
+#Maintained by: RehabMan for: Laptop Patches
+#graphics_INI-disable_SSDT.txt
+#this patch must be applied to SSDT-7.aml
+
+into method label _INI parent_label \_SB.PCI0.PEG0.PEGP insert
+begin
+//added to turn nvidia/radeon off\n
+_OFF()\n
+end;

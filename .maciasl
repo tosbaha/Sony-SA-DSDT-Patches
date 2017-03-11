@@ -5,7 +5,8 @@
 [gfx] 1. Rename GFX0 to IGPU	Patches/graphics_Rename-GFX0.txt
 [gfx] 2. EDID data for 1600 x 900 Display	Patches/graphics_EDID.txt
 [gfx] 3. Brightness Fix		Patches/graphics_PNLF_ivy_sandy.txt
-[gfx] 4. Disable AMD GPU	Patches/graphics_INI-disable.txt
+[gfx] 4. Disable AMD GPU (SSDT)	Patches/graphics_INI-disable_SSDT.txt
+[gfx] 5. Cleanup/Fix Errors (SSDT)		Patches/graphics_SSDT-disable-cleanup.txt
 [sys] === Sony-S Required Patches ===	Patches/NullPatch.txt
 [sys] 1. Add IMEI	Patches/system_IMEI.txt
 [sys] 2. Add MCHC	Patches/system_MCHC.txt
@@ -15,10 +16,9 @@
 [sys] 6. SMBUS Fix	Patches/system_SMBUS.txt
 [sys] 7. RTC Fix 	Patches/system_RTC.txt
 [sys] 8. IRQ Fix	Patches/system_IRQ.txt
-[sys] 9. AC Adapter Fix	Patches/system_ADP1.txt
-[sys] 10. OS Check Fix	Patches/system_OSYS.txt
-[sys] 11. Fix Device PS2M	Patches/Fix_Device_PS2M.txt
-[sys] 12. Fix _PLD Buffer/Package Error	Patches/fix_PLD.txt
-[sys] 13. _T_x rename	Patches/system_TX.txt
-[sys] 14. Audio Layout 3	Patches/audio_HDEF-layout3.txt
-[sys] 15. 6-Series USB	Patches/usb_USB_6-series.txt
+[sys] 9. OS Check Fix	Patches/system_OSYS.txt
+[sys] 10. Fix _PLD Buffer/Package Error	Patches/fix_PLD.txt
+[sys] 11. Enable Function Keys	Patches/function_keys.txt
+[sys] 12. Audio Layout 3	Patches/audio_HDEF-layout3.txt
+[sys] 13. 6-Series USB	Patches/usb_USB_6-series.txt
+[sys] 14. Remove _PSS placeholders(SSDT)	Patches/fix_PSS.txt

@@ -1,8 +1,0 @@
-# Maintained by: JayMonkey for: Sony S Laptop Patches
-# Fix_Device_PS2M.txt
-
-into device label PS2M insert
-begin
-	 Name (_HID, EisaId ("SNY9014"))\n
-end;
-into method label _HID parent_label PS2M remove_entry;

@@ -32,6 +32,11 @@ Dump your original ACPI tables with Clover by hitting F4 on boot screen. Origina
 
 ## Your EDID data
 You will not able to see installation screen, if you don't add the necessary EDID data. Your screen EDID data can be different than mine. Therefore you must extract your native EDID from Windows. You can use [Monitor Asset Manager](http://www.entechtaiwan.com/util/moninfo.shtm) to extract. Download the software, open it and select your monitor and copy the 128 bytes raw data. You will use this data in your EDID patch.
+
+**10.12.4 Update**
+
+This update requires some changes to EDID data. You must also patch your EDID data with included `edidparser.rb` Run `edidparser.rb` and change your EDID either with DSDT or Clover patch.
+
 ## MaciASL
 Download RehabMan's [MaciASL](https://bitbucket.org/RehabMan/os-x-maciasl-patchmatic/downloads) Open MaciASL and add my repo by going Preferences/Sources
 ## Applying Patches
@@ -73,15 +78,20 @@ sudo cat /sys/firmware/acpi/tables/SSDT6 >ssdt6.aml
 ```
 Bu komutu çalıştırdığınız yerde oluşan *.aml dosyalarını kopyalayın.
 
-### Extracting using Clover
+### Clover ile almak
 Orjinal ACPI tablolarını en kolay Clover ile alabilirsiniz. Clover ekranında iken F4 tuşuna basınç Böylecek orjinal tablolar /EFI/CLOVER/origin klasörüne kaydedilecektir.
 
 ## EDID bilgisi
 Eğer EDID bilgisini eklemezseniz kurulum ekranını göremezsiniz. Sizin EDID bilginiz benimkinden farklı olabilir. Bu yüzden EDID bilgisini Windows üzerinden almanız gerekmektedir. [Monitor Asset Manager](http://www.entechtaiwan.com/util/moninfo.shtm) programını kullanarak bu bilgiye sahip olabilirsiniz. Programı indirip çalıştırın ve monitörünüzü seçip daha sonra 128 karakterden oluşan EDID bilgisini kopyalayın. Bu bilgiyi EDID yamasında kullanacaksınız.
+
+**10.12.4 Güncellemesi**
+
+Bu güncelleme ile EDID bilgisinin yamanması gerekmektedir. EDID bilginizi `edidparser.rb` ile yamalayın. Ekteki `edidparser.rb` ile olusan EDID bilgisini ister Clover ister DSDT ile ekleyin.
+
 ## MaciASL
 RehabMan'ın [MaciASL](https://bitbucket.org/RehabMan/os-x-maciasl-patchmatic/downloads) yazılımını kısmından inidirin ve daha sonra MaciASL i açın ve Preferences/Sources sekmesini seçin. Daha sonra __+__ butonuna tıklayaın. **Name** kısmına Sony **URL** kısmına da https://raw.githubusercontent.com/tosbaha/Sony-SA-DSDT-Patches/master/ yazın.
 ## Yamaların Uygulanması
-### DSDT Patches
+### DSDT Yamaları
 DSDT dosyanızı MaciASL ile açın ve yamaları uygulayın. EDID data for 1600 x 900 Display yaması *zorunlu* bir yamadır. Bu yama olmadan kurulum ekranı açılmyacaktır. Eğer DSDT yaması yapamıyorsanız bu bilgileri Clover ile de ekleyebilirsiniz. ACL275 ses kartı için HDEF yamasının yapılması gerekmektedir. Ekran parlaklığı, batarya ve diğer şeyler için diğer yamaları da uygulayabilirsiniz.
-##Disabling Radeon
+##Radeon kartın kapatılması
 SSDT-7.aml dosyasını bu repo da bulunan SSDT yamaları ile yamalayın.(Rename GFX0 to IGPU,AMD Disable, Cleanup SSDT)

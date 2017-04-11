@@ -4,9 +4,8 @@
 [gfx] === Sony-S Display Options ===	Patches/NullPatch.txt
 [gfx] 1. Rename GFX0 to IGPU	Patches/graphics_Rename-GFX0.txt
 [gfx] 2. EDID data for 1600 x 900 Display	Patches/graphics_EDID.txt
-[gfx] 3. Brightness Fix		Patches/graphics_PNLF_ivy_sandy.txt
-[gfx] 4. Disable AMD GPU (SSDT)	Patches/graphics_INI-disable_SSDT.txt
-[gfx] 5. Cleanup/Fix Errors (SSDT)		Patches/graphics_SSDT-disable-cleanup.txt
+[gfx] 3. Disable AMD GPU (SSDT)	Patches/graphics_INI-disable_SSDT.txt
+[gfx] 4. Cleanup/Fix Errors (SSDT)		Patches/graphics_SSDT-disable-cleanup.txt
 [sys] === Sony-S Required Patches ===	Patches/NullPatch.txt
 [sys] 1. Add IMEI	Patches/system_IMEI.txt
 [sys] 2. Add MCHC	Patches/system_MCHC.txt

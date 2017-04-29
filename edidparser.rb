@@ -14,15 +14,22 @@ def color(src,color=RED)
 end
 
 bytes = []
-
 if ARGV.count == 0
     puts color("Reading EDID from SYSTEM")
+    begin
     data=`ioreg -l -w0 -d0 -r -c AppleBacklightDisplay`
     edid_hex=data.match(/IODisplayEDID.*?<([a-z0-9]+)>/i)[1]
     vendorid=data.match(/DisplayVendorID.*?([0-9]+)/i)[1].to_i
     productid=data.match(/DisplayProductID.*?([0-9]+)/i)[1].to_i
     puts "found display: vendorid #{vendorid}, productid #{productid}, EDID:\n#{edid_hex}"
     bytes=edid_hex.scan(/../).map{|x|Integer("0x#{x}")}.flatten
+  rescue Exception => bang
+    puts "Can't Read EDID from SYSTEM. Make sure you have Rename GFX0 to IGPU patches applied."
+    puts "Error Details: "
+    puts bang
+    puts bang.backtrace.join("\n")
+    exit
+  end
 else
     puts color("Reading EDID from FILE")
     file = ARGV.first
@@ -32,17 +39,17 @@ end
 puts "EDID Length : " + color(("%d bytes" % bytes.length),GREEN)
 edid=bytes[8..20]
 if edid[0] >> 7 != 0
-	puts color("This EDID is corrupted")
+  puts color("This EDID is corrupted")
 else
-	first = (edid[0] &  0b01111100) >> 2
-	second = ((edid[0] &  0b00000011) << 3) + ((edid[1] &  0b11100000) >> 5)
-	third = edid[1] &  0b00011111
-    puts "=====Original EDID Data START======"
-	puts "Manufacturer: " + color((first+64).chr + (second+64).chr + (third+64).chr)
-	puts "Product Code:  " + color(("%02X%02X" % [edid[3], edid[2]]), BLUE)
-	puts "Serial Number: " + color(("%d" % (edid[4] + (edid[5] << 8) + (edid[6] << 16) + (edid[7] << 24))), GREEN)
-    puts "Week of Manufacture: " + color(("%d" % edid[8]),RED)
-	puts "Year of Manufacture: " + color(("%d" % (edid[9] + 1990)),BLUE)
+  first = (edid[0] &  0b01111100) >> 2
+  second = ((edid[0] &  0b00000011) << 3) + ((edid[1] &  0b11100000) >> 5)
+  third = edid[1] &  0b00011111
+  puts "=====Original EDID Data START======"
+  puts "Manufacturer: " + color((first+64).chr + (second+64).chr + (third+64).chr)
+  puts "Product Code:  " + color(("%02X%02X" % [edid[3], edid[2]]), BLUE)
+  puts "Serial Number: " + color(("%d" % (edid[4] + (edid[5] << 8) + (edid[6] << 16) + (edid[7] << 24))), GREEN)
+  puts "Week of Manufacture: " + color(("%d" % edid[8]),RED)
+  puts "Year of Manufacture: " + color(("%d" % (edid[9] + 1990)),BLUE)
 end
 
 checksum = (0x100-(bytes[0..126].reduce(:+) % 256)) % 256

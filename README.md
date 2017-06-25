@@ -62,7 +62,7 @@ Patch SSDT-7.aml with SSDT patches from repo(Rename GFX0 to IGPU,AMD Disable, Cl
 
 Bu yamalar Sony VPCSA33GX Laptop için üretilmiştir. Bu yamaları kullanabilmek için aşağıdaki işlemlerin yapılması gerekir
 
-1. [DSDT ve SSDT dosyalarının alınması](#dsdt-ve-ssdt-dosyalar%C4%B1n-al%C4%B1nmas%C4%B1)
+1. [DSDT ve SSDT dosyalarının alınması](#dsdt-ve-ssdt-dosyalar%C4%B1n%C4%B1n-al%C4%B1nmas%C4%B1)
 2. [EDID bilgisi](#edid-bilgisi)
 3. [MaciASL](#maciasl-1)
 4. [Yamaların uygulanması](#yamalar%C4%B1n-uygulanmas%C4%B1)

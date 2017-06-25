@@ -40,6 +40,13 @@ begin
 SNFS()\n
 end;
 
+#Insert enable code for _WAK
+into method label _WAK code_regex If\s+\(ECON\)\s+\{ replace_matched
+begin
+%0\n
+SNFS()\n
+end;
+
 # sony_functionkeys_start
 into method label SNFS remove_entry;
 into definitionblock code_regex . insert
